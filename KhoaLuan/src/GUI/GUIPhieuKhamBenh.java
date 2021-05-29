@@ -85,7 +85,7 @@ public class GUIPhieuKhamBenh extends JFrame implements MouseListener,ActionList
 	private JRadioButton rdbhoanthanh;
 	private JRadioButton rdbchuahoanthanh;
 	private JLabel lblmaBN;
-	private JButton btnhuy,btnthem;
+	private JButton btnhuy;
 	private JButton btnluu;
 	private JComboBox comboBox;
 
@@ -318,18 +318,11 @@ public class GUIPhieuKhamBenh extends JFrame implements MouseListener,ActionList
 				btnluu.setBounds(767, 564, 155, 57);
 				contentPane.add(btnluu);
 				
-				btnthem = new JButton("Thêm");
-				btnthem.setIcon(new ImageIcon("add.png"));
-				btnthem.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				btnthem.setBounds(53, 564, 155, 57);
-				contentPane.add(btnthem);
-				
 			comboBox.setEnabled(false);
 			
 				
 			btnhuy.addActionListener(this);
 			btnluu.addActionListener(this);
-			btnthem.addActionListener(this);
 			comboBox.setSelectedItem(mBenhNhan.getId());
 	}
 
@@ -441,12 +434,12 @@ public class GUIPhieuKhamBenh extends JFrame implements MouseListener,ActionList
 		
 		{
 			try {
-				list.addAll(phieuKhamService.GetAllPhieuKhamByNhanVienIDANDDate(Long.parseLong(comboBox.getSelectedItem().toString())));
+				list.addAll(phieuKhamService.GetAllPhieuKhamByBenhNhanIDANDDate(Long.parseLong(comboBox.getSelectedItem().toString())));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(list.size()>0) {
+			if(list.size()!=0) {
 				for (PhieuKhambenh pk : list) {
 					String trangthai=null;
 					if(pk.isTrangThai())

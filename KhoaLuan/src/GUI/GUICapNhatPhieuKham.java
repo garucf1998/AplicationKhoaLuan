@@ -487,19 +487,21 @@ public class GUICapNhatPhieuKham extends JFrame implements ActionListener,MouseL
 		// TODO Auto-generated method stub
 		ArrayList<PhieuKhambenh>list=new ArrayList<>();
 		try {
-			list.addAll(phieuKhamService.GetAllPhieuKhamByNhanVienIDANDDate(Long.parseLong(comboBox.getSelectedItem().toString())));
+			list.addAll(phieuKhamService.GetAllPhieuKhamByBenhNhanIDANDDate(Long.parseLong(comboBox.getSelectedItem().toString())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (PhieuKhambenh pk : list) {
-			String trangthai=null;
-			if(pk.isTrangThai())
-				trangthai="Hoàn thành";
-			else
-				trangthai="Chưa hoàn thành";
-			String[] rowdata = { String.valueOf(pk.getId()),pk.getTrieuChung(),benhnhanservice.doichuoitungay(pk.getNgayLapPhieu()),pk.getNhanvien().getTen(),trangthai};
-			datamodel.addRow(rowdata);
+		if(list.size()!=0) {
+			for (PhieuKhambenh pk : list) {
+				String trangthai=null;
+				if(pk.isTrangThai())
+					trangthai="Hoàn thành";
+				else
+					trangthai="Chưa hoàn thành";
+				String[] rowdata = { String.valueOf(pk.getId()),pk.getTrieuChung(),benhnhanservice.doichuoitungay(pk.getNgayLapPhieu()),pk.getNhanvien().getTen(),trangthai};
+				datamodel.addRow(rowdata);
+			}
 		}
 	}
 	public void removeTable() {

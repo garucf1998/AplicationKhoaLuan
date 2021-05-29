@@ -285,10 +285,12 @@ public class GUIHoaDon extends JFrame implements ActionListener,MouseListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			for (ChiTietDonThuoc pk : list) {
-				
-				String[] rowdata = { String.valueOf(pk.getId()),pk.getThuoc().getTenThuoc(),String.valueOf(pk.getSoLuong()),pk.getGhiChu(),String.valueOf(pk.getGiaTien())};
-				datamodel1.addRow(rowdata);
+			if(list.size()!=0) {
+				for (ChiTietDonThuoc pk : list) {
+					
+					String[] rowdata = { String.valueOf(pk.getId()),pk.getThuoc().getTenThuoc(),String.valueOf(pk.getSoLuong()),pk.getGhiChu(),String.valueOf(pk.getGiaTien())};
+					datamodel1.addRow(rowdata);
+				}
 			}
 		}
 		if(pkb!=null) {
@@ -299,10 +301,12 @@ public class GUIHoaDon extends JFrame implements ActionListener,MouseListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			for (PhieuDichVu pk : list1) {
-				
-				String[] rowdata = { String.valueOf(pk.getId()),pk.getGhiChu(),pk.getKetLuan(),benhnhanservice.doichuoitungay(pk.getNgayTaoPhieu()),pk.getDichVu().getGhiChu(),String.valueOf(pk.getGiaTienDV())};
-				datamodel2.addRow(rowdata);
+			if(list1.size()!=0) {
+				for (PhieuDichVu pk : list1) {
+					
+					String[] rowdata = { String.valueOf(pk.getId()),pk.getGhiChu(),pk.getKetLuan(),benhnhanservice.doichuoitungay(pk.getNgayTaoPhieu()),pk.getDichVu().getGhiChu(),String.valueOf(pk.getGiaTienDV())};
+					datamodel2.addRow(rowdata);
+				}
 			}
 		}
 		
@@ -366,7 +370,9 @@ public class GUIHoaDon extends JFrame implements ActionListener,MouseListener{
 				removeTable();
 				removeTable1();
 				removeTable2();
-				updateTableData();
+				dispose();
+				GUIChucNang cn= new GUIChucNang(mTaiKhoan, mNhanVien);
+				cn.setVisible(true);
 			}
 		}
 	}
@@ -380,7 +386,7 @@ public class GUIHoaDon extends JFrame implements ActionListener,MouseListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(list!=null)
+		if(list.size()!=0)
 		{
 			
 			for (HoaDon hd : list) {

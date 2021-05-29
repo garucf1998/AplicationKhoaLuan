@@ -162,7 +162,6 @@ public class GUIDonThuoc extends JFrame implements ActionListener,MouseListener{
 		for(int i=0;i<listthuoc.size();i++)
 			comboBox.addItem(listthuoc.get(i).getTenThuoc());
 		comboBox.setSelectedItem(null);
-		
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				for(int i=0;i<listthuoc.size();i++)
@@ -384,10 +383,12 @@ public class GUIDonThuoc extends JFrame implements ActionListener,MouseListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (ChiTietDonThuoc pk : list) {
-			
-			String[] rowdata = { String.valueOf(pk.getId()),pk.getThuoc().getTenThuoc(),String.valueOf(pk.getSoLuong()),pk.getGhiChu(),String.valueOf(pk.getGiaTien())};
-			datamodel.addRow(rowdata);
+		if(list.size()!=0) {
+			for (ChiTietDonThuoc pk : list) {
+				
+				String[] rowdata = { String.valueOf(pk.getId()),pk.getThuoc().getTenThuoc(),String.valueOf(pk.getSoLuong()),pk.getGhiChu(),String.valueOf(pk.getGiaTien())};
+				datamodel.addRow(rowdata);
+			}
 		}
 	}
 	public void removeTable() {

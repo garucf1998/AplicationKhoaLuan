@@ -497,7 +497,7 @@ public class GUIThongTinNhanVien extends JFrame implements MouseListener,ActionL
 				if(!(control.KiemTraTaiKhoan(tk)))
 				{
 					try {
-						responseCode=taikhoanController.POSTRequest(tk);
+						responseCode=taikhoanController.POSTTaiKhoan(tk);
 						if(responseCode==200)
 						{
 							try {
@@ -694,7 +694,7 @@ public class GUIThongTinNhanVien extends JFrame implements MouseListener,ActionL
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(list.get(0)!=null)
+		if(list.size()!=0)
 		{
 			for (NhanVien nv : list) {
 				

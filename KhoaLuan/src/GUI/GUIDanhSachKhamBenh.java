@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -144,6 +145,9 @@ public class GUIDanhSachKhamBenh extends JFrame implements MouseListener, Action
 			GUIPhieuKhamBenh pkb= new GUIPhieuKhamBenh(mTaiKhoan, mNhanVien,mBenhNhan,mLichHen);
 			pkb.setVisible(true);
 		}
+		else 
+			JOptionPane.showMessageDialog(this,"Bệnh nhân này đã khám rồi !","Chú ý",JOptionPane.CLOSED_OPTION);
+		
 	}
 
 	@Override
@@ -183,7 +187,7 @@ public class GUIDanhSachKhamBenh extends JFrame implements MouseListener, Action
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(list!=null)
+		if(list.size()!=0)
 		{
 			
 			for (LichHen pk : list) {

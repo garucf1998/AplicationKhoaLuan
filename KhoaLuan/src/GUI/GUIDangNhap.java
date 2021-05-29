@@ -108,7 +108,7 @@ public class GUIDangNhap extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == e.VK_ENTER){
-						dangnhap();
+						Dangnhap();
 					}
 			
 			}
@@ -127,7 +127,7 @@ public class GUIDangNhap extends JFrame {
 		btndangNhap = new JButton("Đăng Nhập");
 		btndangNhap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dangnhap();
+				Dangnhap();
 			}
 		});
 		btndangNhap.setIcon(new ImageIcon("Login-in-icon.png"));
@@ -151,7 +151,7 @@ public class GUIDangNhap extends JFrame {
 		nhanVienService=new NhanVienService();
 	}
 	@SuppressWarnings("unlikely-arg-type")
-	private void dangnhap() {
+	private void Dangnhap() {
 		TaiKhoan taiKhoan=new TaiKhoan();
 		NhanVien nhanvien=new NhanVien();
 		

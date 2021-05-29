@@ -174,7 +174,7 @@ public class PhieuKhamService {
 	 * @decription: Lấy danh sách phiếu khám theo bệnh nhân id được gọi về từ RestFullAPI
 	 * */
 	//[START GetAll phiếu khám theo bệnh nhân id]
-	public  List<PhieuKhambenh>GetAllPhieuKhamByNhanVienIDANDDate(Long idbn) throws IOException {
+	public  List<PhieuKhambenh>GetAllPhieuKhamByBenhNhanIDANDDate(Long idbn) throws IOException {
 		List<PhieuKhambenh>getall=new ArrayList<>();
 	    URL urlForGetRequest = new URL(GET_PHIEU_KHAM_BY_ID_BENH_NHAN+"/"+idbn);
 	    String readLine = null;

@@ -84,7 +84,6 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 	private JComboBox comboBox,comboBox_1;
 	
 	JRadioButton rdbtnNewRadioButton;
-	JRadioButton rdbtnNewRadioButton_1;
 	JRadioButton rdbtnNewRadioButton_2;
 	
 	private DefaultTableModel datamodel; 
@@ -205,7 +204,7 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 				
 				
 				
-				String[]headers = {"Mã","Ghi Chú","Thời Gian", "Người khám","Bệnh nhân","Triệu Chứng","Hình thức","Trạng thái"};
+				String[]headers = {"Mã","Ghi Chú","Thời Gian", "Người khám","Bệnh nhân","Triệu Chứng","Hình thức","Trạng thái","ID bệnh nhân"};
 				datamodel = new DefaultTableModel(headers,0);
 				contentPane.add(scrollPane= new JScrollPane(table = new JTable(datamodel)));
 				scrollPane.setBounds(51, 185, 1060, 109);
@@ -320,10 +319,6 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 			rdbtnNewRadioButton.setBounds(213, 126, 134, 23);
 			panel_1.add(rdbtnNewRadioButton);
 			
-			 rdbtnNewRadioButton_1 = new JRadioButton("Đã khám");
-			rdbtnNewRadioButton_1.setBounds(412, 126, 109, 23);
-			panel_1.add(rdbtnNewRadioButton_1);
-			
 			 rdbtnNewRadioButton_2 = new JRadioButton("Vắng mặt");
 			rdbtnNewRadioButton_2.setBounds(587, 126, 109, 23);
 			panel_1.add(rdbtnNewRadioButton_2);
@@ -334,17 +329,7 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 				public void mouseClicked(MouseEvent e) {
 					if(rdbtnNewRadioButton.isSelected())
 					{
-						rdbtnNewRadioButton_1.setSelected(false);
-						rdbtnNewRadioButton_2.setSelected(false);
-					}
-				}
-			});
-			rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if(rdbtnNewRadioButton_1.isSelected())
-					{
-						rdbtnNewRadioButton.setSelected(false);
+						
 						rdbtnNewRadioButton_2.setSelected(false);
 					}
 				}
@@ -354,7 +339,7 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 				public void mouseClicked(MouseEvent e) {
 					if(rdbtnNewRadioButton_2.isSelected())
 					{
-						rdbtnNewRadioButton_1.setSelected(false);
+						
 						rdbtnNewRadioButton.setSelected(false);
 					}
 				}
@@ -379,6 +364,7 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 			table.addMouseListener(this);
 			
 			btncapnhat.setEnabled(false);
+			removeTable();
 			updateTableData();
 			
 	}
@@ -391,25 +377,20 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 		
 		tatghichu.setText(table.getValueAt(row, 1).toString());
 		tattrieuchung.setText(table.getValueAt(row, 5).toString());
-		if(table.getValueAt(row, 7).toString().equals("Đã khám"))
+		if(table.getValueAt(row, 7).toString().equals("Đang chờ khám"))
 		{
 			rdbtnNewRadioButton_2.setSelected(false);
-			rdbtnNewRadioButton_1.setSelected(true);
-			rdbtnNewRadioButton.setSelected(false);
-		}
-		else if(table.getValueAt(row, 7).toString().equals("Đang chờ khám"))
-		{
-			rdbtnNewRadioButton_2.setSelected(false);
-			rdbtnNewRadioButton_1.setSelected(false);
+			
 			rdbtnNewRadioButton.setSelected(true);
 		}else {
-			rdbtnNewRadioButton_1.setSelected(false);
+			
 			rdbtnNewRadioButton.setSelected(false);
 			rdbtnNewRadioButton_2.setSelected(true);
 		}
 		comboBox_1.setSelectedItem(table.getValueAt(row, 3).toString());
+		comboBox.setSelectedItem(table.getValueAt(row, 8));
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -448,108 +429,14 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 		}else if(o==btnluu)
 		{
 			
-			LichHen lichHen= new LichHen();
-			LichHen lh=null;
+			LuuLichKham();
 			
-	        try {
-				lh=lichhenservice.GetLichHenBenhNhan(lichhenservice.doichuoitungay(java.util.Calendar.getInstance().getTime()), mBenhNhan.getId());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}	
-			lichHen.setBenhNhan(mBenhNhan);
-			lichHen.setNhanvien(mBacSy);
-			lichHen.setThoiGian(java.util.Calendar.getInstance().getTime());
-			lichHen.setHinhThuc(false);
-			lichHen.setTrieuChung(tattrieuchung.getText());
-			lichHen.setGhiChu(tatghichu.getText());
-			String trangthai="";
-			if(rdbtnNewRadioButton.isSelected())
-				trangthai="1";
-			else if(rdbtnNewRadioButton_1.isSelected())
-				trangthai="2";
-			else if(rdbtnNewRadioButton_2.isSelected())
-				trangthai="3";
-			lichHen.setTrangThai(trangthai);
-			if(lh==null)
-			{
-				int ketquaPost = 0;
-				try {
-					ketquaPost = lichhenservice.POSTLichHen(lichHen);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				if(ketquaPost==200)
-				{
-					
-					JOptionPane.showMessageDialog(this,"Bạn vừa thêm lich hẹn khám thành công !","Chú ý",JOptionPane.CLOSED_OPTION);
-					XoaRong();
-					removeTable();
-					updateTableData();
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(this,"Bệnh nhân này đã có lịch khám trong ngày rồi !","Chú ý",JOptionPane.CLOSED_OPTION);
-				
-			}
 		}else if(o==btnthem)
 		{
-			if(btnthem.getText().equals("Thêm"))
-			{
-				comboBox.setEnabled(true);
-				comboBox_1.setEnabled(true);
-				tatghichu.setEnabled(true);
-				tattrieuchung.setEnabled(true);
-				btnluu.setEnabled(true);
-				btnthem.setText("Hủy");
-			}else if(btnthem.getText().equals("Hủy"))
-			{
-				comboBox.setEnabled(false);
-				comboBox_1.setEnabled(false);
-				tatghichu.setEnabled(false);
-				tattrieuchung.setEnabled(false);
-				btnluu.setEnabled(false);
-				btnthem.setText("Thêm");
-			}
+			Them();
 			
 		}else if(o==btncapnhat) {
-			if(btncapnhat.getText().equals("Cập nhật"))
-			{
-				int KetQuaPUT=0;
-				int row = table.getSelectedRow();
-				LichHen lh=new LichHen();
-				try {
-					lh=lichhenservice.GetOneLichHen(Long.parseLong(table.getValueAt(row, 0).toString()));
-				} catch (NumberFormatException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				String trangthai="";
-				if(rdbtnNewRadioButton.isSelected())
-					trangthai="1";
-				else if(rdbtnNewRadioButton_1.isSelected())
-					trangthai="2";
-				else if(rdbtnNewRadioButton_2.isSelected())
-					trangthai="3";
-				lh.setTrangThai(trangthai);
-				
-				try {
-					 KetQuaPUT=lichhenservice.PUTLichHen(lh);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if(KetQuaPUT==200) {
-					JOptionPane.showMessageDialog(table,"Bạn vừa cập nhật trạng thái 1 lịch khám !","Chú ý",JOptionPane.CLOSED_OPTION);
-					removeTable();
-					updateTableData();
-				}
-			}
+			CapNhat();
 		}
 		
 	}
@@ -561,17 +448,23 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			String date="";
 	        date = formatter.format(java.util.Calendar.getInstance().getTime());
-			list.addAll(lichhenservice.GetLichHenNhanVien(date,mNhanVien.getId()));
+			list.addAll(lichhenservice.GetAllLichHenByDate(date));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(list!=null)
+
+		if(list.size()!=0)
 		{
 			
 			for (LichHen pk : list) {
 				String hinhThuc=null;
 				String trangthai=null;
+				String nhanvien=null;
+				if(pk.getNhanvien()==null)
+					nhanvien="";
+				else
+					nhanvien=pk.getNhanvien().getTen();
 				if(pk.isHinhThuc())
 					hinhThuc="Đặt lịch";
 				else
@@ -582,7 +475,7 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 					trangthai="Vắng mặt";
 				else 
 					trangthai="Đã khám";
-				String[] rowdata = { String.valueOf(pk.getMaLichHen()),pk.getGhiChu(),benhnhanservice.doichuoitungay(pk.getThoiGian()),pk.getNhanvien().getTen(),pk.getBenhNhan().getTen(),pk.getTrieuChung(),hinhThuc,trangthai};
+				String[] rowdata = { String.valueOf(pk.getMaLichHen()),pk.getGhiChu(),benhnhanservice.doichuoitungay(pk.getThoiGian()),nhanvien,pk.getBenhNhan().getTen(),pk.getTrieuChung(),hinhThuc,trangthai,String.valueOf(pk.getBenhNhan().getId())};
 				datamodel.addRow(rowdata);
 			}
 		}
@@ -594,5 +487,111 @@ public class GUIDatLichKham extends JFrame implements ActionListener,MouseListen
 	public void XoaRong() {
 		tattrieuchung.setText("");
 		tatghichu.setText("");
+		comboBox.setSelectedItem(null);
+		comboBox_1.setSelectedItem(null);
+	}
+	public void LuuLichKham() {
+		LichHen lichHen= new LichHen();
+		LichHen lh=null;
+		
+        try {
+			lh=lichhenservice.GetLichHenBenhNhan(lichhenservice.doichuoitungay(java.util.Calendar.getInstance().getTime()), mBenhNhan.getId());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		lichHen.setBenhNhan(mBenhNhan);
+		lichHen.setNhanvien(mBacSy);
+		lichHen.setThoiGian(java.util.Calendar.getInstance().getTime());
+		lichHen.setHinhThuc(false);
+		lichHen.setTrieuChung(tattrieuchung.getText());
+		lichHen.setGhiChu(tatghichu.getText());
+		String trangthai="";
+		if(rdbtnNewRadioButton.isSelected())
+			trangthai="1";
+		else if(rdbtnNewRadioButton_2.isSelected())
+			trangthai="3";
+		lichHen.setTrangThai(trangthai);
+		if(lh==null)
+		{
+			int ketquaPost = 0;
+			try {
+				ketquaPost = lichhenservice.POSTLichHen(lichHen);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if(ketquaPost==200)
+			{
+				
+				JOptionPane.showMessageDialog(this,"Bạn vừa thêm lich hẹn khám thành công !","Chú ý",JOptionPane.CLOSED_OPTION);
+				XoaRong();
+				removeTable();
+				updateTableData();
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(this,"Bệnh nhân này đã có lịch khám trong ngày rồi !","Chú ý",JOptionPane.CLOSED_OPTION);
+			
+		}
+	}
+	public void Them(){
+		if(btnthem.getText().equals("Thêm"))
+		{
+			comboBox.setEnabled(true);
+			comboBox_1.setEnabled(true);
+			tatghichu.setEnabled(true);
+			tattrieuchung.setEnabled(true);
+			btnluu.setEnabled(true);
+			btnthem.setText("Hủy");
+		}else if(btnthem.getText().equals("Hủy"))
+		{
+			comboBox.setEnabled(false);
+			comboBox_1.setEnabled(false);
+			tatghichu.setEnabled(false);
+			tattrieuchung.setEnabled(false);
+			btnluu.setEnabled(false);
+			btnthem.setText("Thêm");
+		}
+	}
+	public void CapNhat() {
+		if(btncapnhat.getText().equals("Cập nhật"))
+		{
+			int KetQuaPUT=0;
+			int row = table.getSelectedRow();
+			LichHen lh=new LichHen();
+			try {
+				lh=lichhenservice.GetOneLichHen(Long.parseLong(table.getValueAt(row, 0).toString()));
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String trangthai="";
+			if(rdbtnNewRadioButton.isSelected())
+				trangthai="1";
+			else if(rdbtnNewRadioButton_2.isSelected())
+				trangthai="3";
+			lh.setTrangThai(trangthai);
+			
+			lh.setNhanvien(mBacSy);
+			lh.setTrieuChung(tattrieuchung.getText());
+			lh.setGhiChu(tatghichu.getText());
+			
+			try {
+				 KetQuaPUT=lichhenservice.PUTLichHen(lh);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(KetQuaPUT==200) {
+				JOptionPane.showMessageDialog(table,"Bạn vừa cập nhật trạng thái 1 lịch khám !","Chú ý",JOptionPane.CLOSED_OPTION);
+				removeTable();
+				updateTableData();
+			}
+		}
 	}
 }

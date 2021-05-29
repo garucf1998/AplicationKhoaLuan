@@ -18,14 +18,17 @@ import com.google.gson.JsonParser;
 
 import enity.BenhNhan;
 import enity.LichHen;
+import enity.NhanVien;
 import enity.PhieuKhambenh;
 
 public class LichHenService {
 	
 	static String POST_LICH_HEN="http://localhost:5001/lichhen/insert";
 	static String GET_ONE_LICH_HEN="http://localhost:5001/lichhen/getone";
+	static String GET_ALL_LICH_HEN_BY_BN="http://localhost:5001/lichhen/getlichhenbybn";
+	static String GET_ALL_LICH_HEN_BY_DATE="http://localhost:5001/lichhen/getlichhenbydate";
 	static String PUT_LICH_HEN="http://localhost:5001/lichhen/update";
-	static String GET_LICH_HEN_TRONG_NGAY="http://localhost:5001/lichhen/ktralichhenbn";
+	static String GET_LICH_HEN_TRONG_NGAY_BN="http://localhost:5001/lichhen/ktralichhenbn";
 	static String GET_LICH_HEN_TRONG_NGAY_NHAN_VIEN="http://localhost:5001/lichhen/ktralichhennv";
 	
 	
@@ -126,7 +129,7 @@ public class LichHenService {
 	
 	public LichHen GetLichHenBenhNhan(String date,Long id) throws IOException {
 		LichHen lh=new LichHen();
-		URL urlForGetRequest = new URL(GET_LICH_HEN_TRONG_NGAY+"/"+date+"/"+id);
+		URL urlForGetRequest = new URL(GET_LICH_HEN_TRONG_NGAY_BN+"/"+date+"/"+id);
 		String readLine = null;
 		HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 		conection.setRequestMethod("GET"); // set userId its a sample here
@@ -226,5 +229,85 @@ public class LichHenService {
 		}
 
 		return lh;
+	}
+	
+	public  List<LichHen>  GetAllLichHenByBenhNhan(Long id) throws IOException {
+		List<LichHen>getall=new ArrayList<>();
+	    URL urlForGetRequest = new URL(GET_ALL_LICH_HEN_BY_BN+"/"+id);
+	    String readLine = null;
+	    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+	    conection.setRequestMethod("GET"); // set userId its a sample here
+	    conection.setRequestProperty("Content-Type", "application/json");
+	    int responseCode = conection.getResponseCode();
+
+	    if (responseCode == HttpURLConnection.HTTP_OK) {
+	        BufferedReader in = new BufferedReader(
+	            new InputStreamReader(conection.getInputStream()));
+	        String response = new String();
+	        while ((readLine = in .readLine()) != null) {
+	            response+=(readLine);
+	        } in .close();
+	        if(responseCode==200)
+	        {
+	        	Gson gson = new GsonBuilder()
+	        		    .setDateFormat("yyyy-MM-dd")
+	        		    .create();
+		        JsonParser parser = new JsonParser();
+		        JsonArray object = (JsonArray) parser.parse(response);// response will be the json String
+		        LichHen[] lichhenList = gson.fromJson(object, LichHen[].class);
+		        	
+		        for(int i=0;i<lichhenList.length;i++)
+		        	getall.add(lichhenList[i]);
+	        }
+	        else
+	        {
+	        	return null;
+	        }
+	        
+	    } else {
+	        System.out.println("GET NOT WORKED");
+	    }
+		return getall;
+
+	}
+	
+	public  List<LichHen>  GetAllLichHenByDate(String  date) throws IOException {
+		List<LichHen>getall=new ArrayList<>();
+	    URL urlForGetRequest = new URL(GET_ALL_LICH_HEN_BY_DATE+"/"+date);
+	    String readLine = null;
+	    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+	    conection.setRequestMethod("GET"); // set userId its a sample here
+	    conection.setRequestProperty("Content-Type", "application/json");
+	    int responseCode = conection.getResponseCode();
+
+	    if (responseCode == HttpURLConnection.HTTP_OK) {
+	        BufferedReader in = new BufferedReader(
+	            new InputStreamReader(conection.getInputStream()));
+	        String response = new String();
+	        while ((readLine = in .readLine()) != null) {
+	            response+=(readLine);
+	        } in .close();
+	        if(responseCode==200)
+	        {
+	        	Gson gson = new GsonBuilder()
+	        		    .setDateFormat("yyyy-MM-dd")
+	        		    .create();
+		        JsonParser parser = new JsonParser();
+		        JsonArray object = (JsonArray) parser.parse(response);// response will be the json String
+		        LichHen[] lichhenList = gson.fromJson(object, LichHen[].class);
+		        	
+		        for(int i=0;i<lichhenList.length;i++)
+		        	getall.add(lichhenList[i]);
+	        }
+	        else
+	        {
+	        	return null;
+	        }
+	        
+	    } else {
+	        System.out.println("GET NOT WORKED");
+	    }
+		return getall;
+
 	}
 }
